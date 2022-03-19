@@ -10,7 +10,7 @@ Loyal Technical Assessment, completed by Yangsheng Chen, 2022/03
    single endpoint (/api/generate) was embeded in a MVC framework project, which provide a simple user-friendly front end interface to user.
    This ASP.Net Core application used Markov chains module to learn from a 5-core subset "Office_Products_5.json", and generate reviews from its trained model.
 
-3. Source code was pushed to GitHub repository "LoyalTest_ReviewGenerator". Dataset file "Office_Products_5.json" was not able to include in the source folder due to its size, and was uploaded to Google Drive for download with link:
+3. Source code was pushed to GitHub repository "LoyalTest_ReviewGenerator". Dataset file "Office_Products_5.json" was not able to include in the source folder due to its size about 398MB, and was uploaded to Google Drive for download with link:
 		https://drive.google.com/file/d/1w1Z4BZazqmx0nzgpgy-m6qKzCwRF3FY9/view?usp=sharing
 
 4. To build and run the project, can use Visual Studio 2022. Once clone the source folder to local, open solution file "ReviewGenerator.sln" with Visual Studio 2022.
