@@ -7,6 +7,8 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllersWithViews();
 builder.Services.AddSingleton<IReviewData, ReviewDataSet>();
 
+builder.Services.AddMvc().AddControllersAsServices();
+
 var app = builder.Build();
 
 IReviewData reviewDataSet = app.Services.GetService<IReviewData>();

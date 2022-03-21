@@ -34,8 +34,9 @@ namespace ReviewGenerator.Controllers
         private async Task<ReviewEntry> GetReview()
         {
             ReviewEntry reviewEntry = null;
-
-            reviewEntry = new GenerateController(this.reviewDataSet).Index();
+            var serviceProvider = this.HttpContext.RequestServices;
+            var gcontroller = (GenerateController)serviceProvider.GetRequiredService<GenerateController>();
+            reviewEntry = gcontroller.Index();
             return reviewEntry;
 
             // another way:
