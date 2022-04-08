@@ -1,4 +1,12 @@
 name: Build and deploy .NET Core application to Web App chentest
+
+on:
+  push:
+    branches:
+      - master
+  workflow_dispatch:
+  
+  
 env:
   AZURE_WEBAPP_NAME: chentest
   AZURE_WEBAPP_PACKAGE_PATH: ReviewGenerator\published
@@ -6,11 +14,7 @@ env:
   DOTNET_CORE_VERSION: 6.0.x
   WORKING_DIRECTORY: ReviewGenerator
   
-  on:
-  push:
-    branches:
-      - master
-  workflow_dispatch:
+
   
 jobs:
   build:
