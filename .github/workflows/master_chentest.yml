@@ -20,17 +20,17 @@ jobs:
         uses: actions/setup-dotnet@v1
         with:
           dotnet-version: '6.0.x'
-          include-prerelease: true
+          #include-prerelease: true
 
-      #- name: Restore dependencies
-      #  run: dotnet restore
+      - name: Restore dependencies
+        run: dotnet restore .
         
       - name: Build with dotnet
-        run: dotnet build --configuration Release
-        #run: dotnet build -c Release --no-restore
+        #run: dotnet build --configuration Release
+        run: dotnet build --configuration Release --no-restore
 
       - name: dotnet publish
-        run: dotnet publish -c Release -o ${{env.DOTNET_ROOT}}/myapp
+        run: dotnet publish --configuration Release --no-build --output ${{env.DOTNET_ROOT}}/myapp
 
       - name: Upload artifact for deployment job
         uses: actions/upload-artifact@v2
