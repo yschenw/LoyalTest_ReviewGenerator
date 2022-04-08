@@ -26,7 +26,8 @@ jobs:
         run: dotnet restore
         
       - name: Build with dotnet
-        run: dotnet build --configuration Release
+        #run: dotnet build --configuration Release
+        run: dotnet build -c Release --no-restore
 
       - name: dotnet publish
         run: dotnet publish -c Release -o ${{env.DOTNET_ROOT}}/myapp
