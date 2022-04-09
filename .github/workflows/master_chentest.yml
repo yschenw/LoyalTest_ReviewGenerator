@@ -11,7 +11,6 @@ env:
   AZURE_WEBAPP_NAME: chentest
   AZURE_WEBAPP_PACKAGE_PATH: ReviewGenerator\published
   CONFIGURATION: Release
-  DOTNET_CORE_VERSION: 6.0.x
   WORKING_DIRECTORY: ReviewGenerator
   
 
@@ -19,18 +18,20 @@ env:
 jobs:
   build:
     runs-on: windows-latest
+		
     steps:
     - uses: actions/checkout@v2
     - name: Setup .NET Core
       uses: actions/setup-dotnet@v1
       with:
-        dotnet-version: ${{ env.DOTNET_CORE_VERSION }}
+        dotnet-version: '6.0.x'
+				
     - name: Restore
       run: dotnet restore "${{ env.WORKING_DIRECTORY }}"
     - name: Build
       run: dotnet build "${{ env.WORKING_DIRECTORY }}" --configuration ${{ env.CONFIGURATION }} --no-restore
-    - name: Test
-      run: dotnet test "${{ env.WORKING_DIRECTORY }}" --no-build
+    #- name: Test
+    #  run: dotnet test "${{ env.WORKING_DIRECTORY }}" --no-build
     - name: Publish
       run: dotnet publish "${{ env.WORKING_DIRECTORY }}" --configuration ${{ env.CONFIGURATION }} --no-build --output "${{ env.AZURE_WEBAPP_PACKAGE_PATH }}"
     - name: Deploy to Azure WebApp
