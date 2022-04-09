@@ -10,11 +10,11 @@ on:
   workflow_dispatch:
 
 env:
-  AZURE_WEBAPP_NAME: chentest
-  AZURE_WEBAPP_PACKAGE_PATH: ReviewGenerator\published
-  CONFIGURATION: Release
   DOTNET_CORE_VERSION: 6.0.x
   WORKING_DIRECTORY: ReviewGenerator
+  CONFIGURATION: Release
+  AZURE_WEBAPP_PACKAGE_PATH: ReviewGenerator\published
+  AZURE_WEBAPP_NAME: chentest
   
 jobs:
   build:
@@ -28,7 +28,7 @@ jobs:
         with:
           #dotnet-version: '6.0.x'                          # working
           ##include-prerelease: true                        # no need
-          dotnet-version: ${{ env.DOTNET_CORE_VERSION }}
+          dotnet-version: ${{ env.DOTNET_CORE_VERSION }}    # working
 
       - name: Restore dependencies
         #run: dotnet restore .                              # not working
@@ -37,21 +37,23 @@ jobs:
       - name: Build with dotnet
         #run: dotnet build --configuration Release                # not working
         #run: dotnet build --configuration Release --no-restore   # not working
-        run: dotnet build "${{ env.WORKING_DIRECTORY }}" --configuration Release --no-restore                           # working. need to put it in a working directory; otherwise, not working.
-        #run: dotnet build "${{ env.WORKING_DIRECTORY }}" --configuration ${{ env.CONFIGURATION }} --no-restore         # working. need to put it in a working directory; otherwise, not working.
+        #run: dotnet build "${{ env.WORKING_DIRECTORY }}" --configuration Release --no-restore                         # working. need to put it in a working directory; otherwise, not working.
+        run: dotnet build "${{ env.WORKING_DIRECTORY }}" --configuration ${{ env.CONFIGURATION }} --no-restore         # working. need to put it in a working directory; otherwise, not working.
 
-      #- name: Test // no need
-      #  run: dotnet test "${{ env.WORKING_DIRECTORY }}" --no-build
+      #- name: Test                                                       # no need
+      #  run: dotnet test "${{ env.WORKING_DIRECTORY }}" --no-build       # no need
 
       - name: dotnet publish
-        #run: dotnet publish "${{ env.WORKING_DIRECTORY }}" --configuration Release --no-build --output ${{env.DOTNET_ROOT}}/myapp          # working. need to publish it from a working directory; otherwise, not working.
-        run: dotnet publish "${{ env.WORKING_DIRECTORY }}" --configuration ${{ env.CONFIGURATION }} --no-build --output ${{env.DOTNET_ROOT}}/myapp          # working. need to publish it from a working directory; otherwise, not working.
+        #run: dotnet publish "${{ env.WORKING_DIRECTORY }}" --configuration Release --no-build --output ${{env.DOTNET_ROOT}}/myapp                                      # working. need to publish it from a working directory; otherwise, not working.
+        #run: dotnet publish "${{ env.WORKING_DIRECTORY }}" --configuration ${{ env.CONFIGURATION }} --no-build --output ${{env.DOTNET_ROOT}}/myapp                     # working. need to publish it from a working directory; otherwise, not working.
+        run: dotnet publish "${{ env.WORKING_DIRECTORY }}" --configuration ${{ env.CONFIGURATION }} --no-build --output "${{ env.AZURE_WEBAPP_PACKAGE_PATH }}"          #? working. need to publish it from a working directory; otherwise, not working.
 
       - name: Upload artifact for deployment job
         uses: actions/upload-artifact@v2
         with:
           name: .net-app
-          path: ${{env.DOTNET_ROOT}}/myapp
+        #  path: ${{env.DOTNET_ROOT}}/myapp                   # working
+          path: ${{ env.AZURE_WEBAPP_PACKAGE_PATH }}          # ?working
 
   deploy:
     runs-on: windows-latest
@@ -70,7 +72,8 @@ jobs:
         id: deploy-to-webapp
         uses: azure/webapps-deploy@v2
         with:
-          app-name: 'chentest'
+          #app-name: 'chentest'                                 # working
+          app-name: ${{ env.AZURE_WEBAPP_NAME }}                # working?
           slot-name: 'Production'
           publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_70F5BCA9DA8F4672907E66B59B3AF28C }}
           package: .
