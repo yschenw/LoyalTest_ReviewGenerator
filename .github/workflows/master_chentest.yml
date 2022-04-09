@@ -5,20 +5,17 @@ on:
     branches:
       - master
   workflow_dispatch:
-  
-  
+
 env:
   AZURE_WEBAPP_NAME: chentest
   AZURE_WEBAPP_PACKAGE_PATH: ReviewGenerator\published
   CONFIGURATION: Release
   WORKING_DIRECTORY: ReviewGenerator
   
-
-  
 jobs:
   build:
     runs-on: windows-latest
-		
+
     steps:
     - uses: actions/checkout@v2
     - name: Setup .NET Core
