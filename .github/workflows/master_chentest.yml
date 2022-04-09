@@ -26,23 +26,26 @@ jobs:
       - name: Set up .NET Core
         uses: actions/setup-dotnet@v1
         with:
-          dotnet-version: '6.0.x'
-          #include-prerelease: true
+          #dotnet-version: '6.0.x'                          # working
+          ##include-prerelease: true                        # no need
+          dotnet-version: ${{ env.DOTNET_CORE_VERSION }}
 
       - name: Restore dependencies
-        #run: dotnet restore .
-        run: dotnet restore "${{ env.WORKING_DIRECTORY }}"
+        #run: dotnet restore .                              # not working
+        run: dotnet restore "${{ env.WORKING_DIRECTORY }}"  # working. need to put it in a working directory; otherwise, not working.
         
       - name: Build with dotnet
-        #run: dotnet build --configuration Release  // not working
-        #run: dotnet build --configuration Release --no-restore
-        run: dotnet build "${{ env.WORKING_DIRECTORY }}" --configuration ${{ env.CONFIGURATION }} --no-restore
+        #run: dotnet build --configuration Release                # not working
+        #run: dotnet build --configuration Release --no-restore   # not working
+        run: dotnet build "${{ env.WORKING_DIRECTORY }}" --configuration Release --no-restore                           # working. need to put it in a working directory; otherwise, not working.
+        #run: dotnet build "${{ env.WORKING_DIRECTORY }}" --configuration ${{ env.CONFIGURATION }} --no-restore         # working. need to put it in a working directory; otherwise, not working.
 
-      #- name: Test
+      #- name: Test // no need
       #  run: dotnet test "${{ env.WORKING_DIRECTORY }}" --no-build
 
       - name: dotnet publish
-        run: dotnet publish "${{ env.WORKING_DIRECTORY }}" --configuration Release --no-build --output ${{env.DOTNET_ROOT}}/myapp
+        #run: dotnet publish "${{ env.WORKING_DIRECTORY }}" --configuration Release --no-build --output ${{env.DOTNET_ROOT}}/myapp          # working. need to publish it from a working directory; otherwise, not working.
+        run: dotnet publish "${{ env.WORKING_DIRECTORY }}" --configuration ${{ env.CONFIGURATION }} --no-build --output ${{env.DOTNET_ROOT}}/myapp          # working. need to publish it from a working directory; otherwise, not working.
 
       - name: Upload artifact for deployment job
         uses: actions/upload-artifact@v2
