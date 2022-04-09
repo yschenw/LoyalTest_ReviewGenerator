@@ -78,6 +78,5 @@ jobs:
           app-name: ${{ env.AZURE_WEBAPP_NAME }}                # working
           slot-name: 'Production'
           publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_70F5BCA9DA8F4672907E66B59B3AF28C }}
-          #package: .          # working
+          package: .          # working
           #package: ./test     # not working
-          package: .net-app/published           # working
