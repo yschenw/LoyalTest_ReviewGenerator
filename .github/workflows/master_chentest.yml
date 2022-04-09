@@ -11,9 +11,10 @@ on:
 
 env:
   DOTNET_CORE_VERSION: 6.0.x
-  WORKING_DIRECTORY: ReviewGenerator
+  WORKING_DIRECTORY: ReviewGenerator       # ReviewGenerator is root folder of project, it include all files (source, bin etc)
   CONFIGURATION: Release
-  AZURE_WEBAPP_PACKAGE_PATH: ReviewGenerator\published
+  #AZURE_WEBAPP_PACKAGE_PATH: ReviewGenerator\published       # ReviewGenerator is root folder of project, it include all files (source, bin etc)
+  AZURE_WEBAPP_PACKAGE_PATH: ReviewGenerator\test\published       # ReviewGenerator is root folder of project, it include all files (source, bin etc)
   AZURE_WEBAPP_NAME: chentest
   
 jobs:
@@ -55,7 +56,8 @@ jobs:
           name: .net-app
         #  path: ${{env.DOTNET_ROOT}}/myapp                   # working
         #  path: ${{ env.AZURE_WEBAPP_PACKAGE_PATH }}          # working
-          path: ./ReviewGenerator                             # working
+        #  path: ./ReviewGenerator                             # working, but upload all root folder files, not good.
+          path: ReviewGenerator/test
 
   deploy:
     runs-on: windows-latest
