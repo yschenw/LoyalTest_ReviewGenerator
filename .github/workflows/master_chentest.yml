@@ -11,10 +11,10 @@ on:
 
 env:
   DOTNET_CORE_VERSION: 6.0.x
-  WORKING_DIRECTORY: ReviewGenerator       # ReviewGenerator is root folder of project, it include all files (source, bin etc)
+  WORKING_DIRECTORY: ReviewGenerator       # ReviewGenerator is the root folder of project, it include all files (source, bin etc)
   CONFIGURATION: Release
-  #AZURE_WEBAPP_PACKAGE_PATH: ReviewGenerator\published       # ReviewGenerator is root folder of project, it include all files (source, bin etc)
-  AZURE_WEBAPP_PACKAGE_PATH: ReviewGenerator\test\published   # working, it will deploy folder "published" to Azure.
+  #AZURE_WEBAPP_PACKAGE_PATH: ReviewGenerator\published       # working. ReviewGenerator is the root folder of project, it include all files (source, bin etc)
+  AZURE_WEBAPP_PACKAGE_PATH: ReviewGenerator\test\published   # working too, it will deploy folder "published" to Azure.
   AZURE_WEBAPP_NAME: chentest
   
 jobs:
@@ -54,12 +54,11 @@ jobs:
         uses: actions/upload-artifact@v2
         with:
         #  name: .net-app              # working
-          name: net-app
+          name: net-app                # working, better
         #  path: ${{env.DOTNET_ROOT}}/myapp                    # working
-        #  path: ${{ env.AZURE_WEBAPP_PACKAGE_PATH }}          # working
         #  path: ./ReviewGenerator                             # not good. working, but upload all root folder files.
-        #  path: ReviewGenerator/test                           # working, it will deploy folder "published" to Azure.
-          path: ./test                           # working, it will deploy folder "published" to Azure.
+          path: ${{ env.AZURE_WEBAPP_PACKAGE_PATH }}           # working, good
+        #  path: ReviewGenerator/test                          # working, good too, and it will deploy folder "published" to Azure.    # cannot use ./test, it will not be able to find the path ./test
 
   deploy:
     runs-on: windows-latest
@@ -73,7 +72,7 @@ jobs:
         uses: actions/download-artifact@v2
         with:
         #  name: .net-app              # working
-          name: net-app
+          name: net-app                # working, better
 
       - name: Deploy to Azure Web App
         id: deploy-to-webapp
@@ -84,4 +83,4 @@ jobs:
           slot-name: 'Production'
           publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_70F5BCA9DA8F4672907E66B59B3AF28C }}
           package: .          # working
-          #package: ./test     # not working
+          #package: ./testfolder     # not working
